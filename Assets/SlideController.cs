@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [ExecuteInEditMode]
 public class SlideController : MonoBehaviour
@@ -23,6 +24,7 @@ public class SlideController : MonoBehaviour
 			}
 
 			slideIndex = Mathf.Clamp(value, 0, slides.Count - 1);
+			PlayerPrefs.SetInt("SlideIndex", slideIndex);
 			ShowSlideAtIndex(slideIndex);
 		}
 	}
@@ -30,9 +32,19 @@ public class SlideController : MonoBehaviour
 	private void GatherSlidesInScene()
 	{
 		slides = new List<GameObject>();
+
+		Scene activeScene;
+
+		if (Application.isPlaying)
+		{
+			activeScene = SceneManager.GetActiveScene();
+		}
+		else
+		{
+			activeScene = EditorSceneManager.GetActiveScene();
+		}
 		
-		var activeScene = EditorSceneManager.GetActiveScene();
-		if (activeScene.IsValid() == false)
+		if (activeScene.IsValid() == false || activeScene.isLoaded == false)
 		{
 			return;
 		}
@@ -50,6 +62,7 @@ public class SlideController : MonoBehaviour
 	{
 		SceneView.onSceneGUIDelegate += OnSceneGUI;
 		EditorApplication.hierarchyChanged += OnHierarchyChanged;
+		SlideIndex = PlayerPrefs.GetInt("SlideIndex", slideIndex);
 		GatherSlidesInScene();
 	}
 
@@ -61,6 +74,12 @@ public class SlideController : MonoBehaviour
 	void OnDisable()
 	{
 		SceneView.onSceneGUIDelegate -= OnSceneGUI;
+		EditorApplication.hierarchyChanged -= OnHierarchyChanged;
+	}
+
+	void OnGUI()
+	{
+		OnSceneGUI(null);
 	}
 
 	private void OnSceneGUI(SceneView sceneview)
