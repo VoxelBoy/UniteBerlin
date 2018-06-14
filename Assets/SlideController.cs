@@ -85,7 +85,8 @@ public class SlideController : MonoBehaviour
 	private void OnSceneGUI(SceneView sceneview)
 	{
 		Handles.BeginGUI();
-		GUILayout.BeginArea(new Rect(Screen.width - 100f, Screen.height - 60f, 100f, 60f));
+		var buttonheight = sceneview == null ? 20f : 60f;
+		GUILayout.BeginArea(new Rect(Screen.width - 100f, Screen.height - buttonheight, 100f, buttonheight));
 		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("<<"))
 		{
@@ -105,6 +106,13 @@ public class SlideController : MonoBehaviour
 		if (Event.current.keyCode == KeyCode.RightArrow && Event.current.type == EventType.KeyDown)
 		{
 			SlideIndex++;
+			Event.current.Use();
+		}
+
+		if ((Event.current.keyCode == KeyCode.Alpha0 || Event.current.keyCode == KeyCode.Keypad0) &&
+		    Event.current.type == EventType.KeyDown)
+		{
+			SlideIndex = 0;
 			Event.current.Use();
 		}
 		
