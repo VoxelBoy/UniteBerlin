@@ -18,12 +18,12 @@ MonoBehaviour:
   m_fontInfo:
     Name: Calibri
     PointSize: 43
-    Scale: 0
+    Scale: 1
     CharacterCount: 250
     LineHeight: 52.5
     Baseline: 0
     Ascender: 32.25
-    CapHeight: 0
+    CapHeight: 27.3125
     Descender: -10.75
     CenterLine: 0
     SuperscriptOffset: 32.25
@@ -33,7 +33,7 @@ MonoBehaviour:
     UnderlineThickness: 2.8134766
     strikethrough: 7.818182
     strikethroughThickness: 2.8134766
-    TabWidth: 0
+    TabWidth: 97.5
     Padding: 5
     AtlasWidth: 512
     AtlasHeight: 512
@@ -42,10 +42,10 @@ MonoBehaviour:
   - id: 32
     x: 6
     y: 517
-    width: 0
-    height: 0
+    width: 9.75
+    height: 43
     xOffset: 0
-    yOffset: 0
+    yOffset: 32.25
     xAdvance: 9.75
     scale: 1
   - id: 33
