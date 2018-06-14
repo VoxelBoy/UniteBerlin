@@ -1,7 +1,10 @@
 {
   "dependencies": {
-    "com.unity.ads": "2.0.8",
+    "com.unity.ads": "exclude",
     "com.unity.textmeshpro": "1.2.3",
-    "com.unity.incrementalcompiler": "0.0.42-preview.1"
+    "com.unity.incrementalcompiler": "0.0.42-preview.1",
+    "com.unity.analytics": "exclude",
+    "com.unity.standardevents": "exclude",
+    "com.unity.purchasing": "exclude"
   }
 }
