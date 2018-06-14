@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,9 +20,10 @@ public class SlideController : MonoBehaviour
 				GatherSlidesInScene();
 			}
 
+			var lastSlideIndex = slideIndex;
 			slideIndex = Mathf.Clamp(value, 0, slides.Count - 1);
 			PlayerPrefs.SetInt("SlideIndex", slideIndex);
-			ShowSlideAtIndex(slideIndex);
+			ShowSlideAtIndex(slideIndex, slideIndex != lastSlideIndex);
 		}
 	}
 
@@ -41,7 +39,9 @@ public class SlideController : MonoBehaviour
 		}
 		else
 		{
-			activeScene = EditorSceneManager.GetActiveScene();
+			#if UNITY_EDITOR
+			activeScene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+			#endif
 		}
 		
 		if (activeScene.IsValid() == false || activeScene.isLoaded == false)
@@ -50,9 +50,10 @@ public class SlideController : MonoBehaviour
 		}
 
 		var rootGOs = activeScene.GetRootGameObjects().ToList();
-		slides = rootGOs.FindAll(x => x.name.StartsWith("slide", StringComparison.InvariantCultureIgnoreCase));
+		int i;
+		slides = rootGOs.FindAll(x => int.TryParse(x.name, out i));
 		slides.Remove(gameObject);
-		slides.Sort((x,y) => x.name.CompareTo(y.name));
+		slides.Sort((x, y) => int.Parse(x.name).CompareTo(int.Parse(y.name)));
 
 		//Make sure Slide Index gets clamped
 		SlideIndex = SlideIndex;
@@ -60,8 +61,14 @@ public class SlideController : MonoBehaviour
 
 	void OnEnable()
 	{
-		SceneView.onSceneGUIDelegate += OnSceneGUI;
-		EditorApplication.hierarchyChanged += OnHierarchyChanged;
+		#if UNITY_EDITOR
+//		Debug.Log("OnEnable, isPlaying:" + Application.isPlayer);
+		if (Application.isPlaying == false)
+		{
+			UnityEditor.SceneView.onSceneGUIDelegate += OnSceneGUI;
+			UnityEditor.EditorApplication.hierarchyChanged += OnHierarchyChanged;
+		}
+		#endif
 		SlideIndex = PlayerPrefs.GetInt("SlideIndex", slideIndex);
 		GatherSlidesInScene();
 	}
@@ -73,26 +80,34 @@ public class SlideController : MonoBehaviour
 
 	void OnDisable()
 	{
-		SceneView.onSceneGUIDelegate -= OnSceneGUI;
-		EditorApplication.hierarchyChanged -= OnHierarchyChanged;
+		#if UNITY_EDITOR
+		if (Application.isPlaying == false)
+		{
+			UnityEditor.SceneView.onSceneGUIDelegate -= OnSceneGUI;
+			UnityEditor.EditorApplication.hierarchyChanged -= OnHierarchyChanged;
+		}
+		#endif
 	}
 
 	void OnGUI()
 	{
-		OnSceneGUI(null);
+		DrawGUI(false);
 	}
 
-	private void OnSceneGUI(SceneView sceneview)
+	private void DrawGUI(bool inSceneView)
 	{
-		Handles.BeginGUI();
-		var buttonheight = sceneview == null ? 20f : 60f;
-		GUILayout.BeginArea(new Rect(Screen.width - 100f, Screen.height - buttonheight, 100f, buttonheight));
+		#if UNITY_EDITOR
+		UnityEditor.Handles.BeginGUI();
+		#endif
+		var buttonheight = inSceneView ? 20f : 20f;
+		GUI.color = new Color(1f,1f,1f,0.1f);
+		//GUILayout.BeginArea(new Rect(Screen.width - 100f, Screen.height - buttonheight, 100f, buttonheight));
 		GUILayout.BeginHorizontal();
-		if (GUILayout.Button("<<"))
+		if (GUILayout.Button("<<", GUILayout.Width(30f)))
 		{
 			SlideIndex--;
 		}
-		if (GUILayout.Button(">>"))
+		if (GUILayout.Button(">>", GUILayout.Width(30f)))
 		{
 			SlideIndex++;
 		}
@@ -117,11 +132,20 @@ public class SlideController : MonoBehaviour
 		}
 		
 		GUILayout.EndHorizontal();
-		GUILayout.EndArea();
-		Handles.EndGUI();
+		//GUILayout.EndArea();
+		#if UNITY_EDITOR
+		UnityEditor.Handles.EndGUI();
+		#endif
 	}
 
-	private void ShowSlideAtIndex(int index)
+	#if UNITY_EDITOR
+	private void OnSceneGUI(UnityEditor.SceneView sceneview)
+	{
+		DrawGUI(true);
+	}
+	#endif
+
+	private void ShowSlideAtIndex(int index, bool indexChanged)
 	{
 		if (index < 0 || index >= slides.Count)
 		{
@@ -132,6 +156,12 @@ public class SlideController : MonoBehaviour
 		for (int i = 0; i < slides.Count; i++)
 		{
 			slides[i].SetActive(i == index);
+			#if UNITY_EDITOR
+			if (i == index && indexChanged)
+			{
+				UnityEditor.Selection.activeGameObject = slides[i];
+			}
+			#endif
 		}
 	}
 }
