@@ -54,6 +54,19 @@ public class SlideController : MonoBehaviour
 		slides = rootGOs.FindAll(x => int.TryParse(x.name, out i));
 		slides.Remove(gameObject);
 		slides.Sort((x, y) => int.Parse(x.name).CompareTo(int.Parse(y.name)));
+		
+		//Make sure there are no gaps in the slide numbers
+		int index = 1;
+		for (i = 0; i < slides.Count; i++)
+		{
+			int slideNameInt = int.Parse(slides[i].name);
+			if (slideNameInt != index)
+			{
+				slides[i].name = index.ToString();
+			}
+
+			index++;
+		}
 
 		//Make sure Slide Index gets clamped
 		SlideIndex = SlideIndex;
