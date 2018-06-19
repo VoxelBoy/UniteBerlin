@@ -8,7 +8,7 @@ public class SlideController : MonoBehaviour
 {
 
 	public int slideIndex;
-	public List<GameObject> slides = new List<GameObject>();
+	public List<Slide> slides = new List<Slide>();
 
 	public int SlideIndex
 	{
@@ -21,15 +21,33 @@ public class SlideController : MonoBehaviour
 			}
 
 			var lastSlideIndex = slideIndex;
+			
 			slideIndex = Mathf.Clamp(value, 0, slides.Count - 1);
 			PlayerPrefs.SetInt("SlideIndex", slideIndex);
 			ShowSlideAtIndex(slideIndex, slideIndex != lastSlideIndex);
 		}
 	}
+	
+	public int elementIndex;
+
+	public int ElementIndex
+	{
+		get { return elementIndex; }
+		set
+		{
+			elementIndex = value;
+			var slide = slides[slideIndex];
+
+			for (int i = 0; i < slide.Elements.Count; i++)
+			{
+				slide.Elements[i].SetActive(i < elementIndex);
+			}
+		}
+	}
 
 	private void GatherSlidesInScene()
 	{
-		slides = new List<GameObject>();
+		slides = new List<Slide>();
 
 		Scene activeScene;
 
@@ -44,15 +62,15 @@ public class SlideController : MonoBehaviour
 			#endif
 		}
 		
-		if (activeScene.IsValid() == false || activeScene.isLoaded == false)
+		if (Application.isPlaying == false && (activeScene.IsValid() == false || activeScene.isLoaded == false))
 		{
 			return;
 		}
 
 		var rootGOs = activeScene.GetRootGameObjects().ToList();
 		int i;
-		slides = rootGOs.FindAll(x => int.TryParse(x.name, out i));
-		slides.Remove(gameObject);
+		var slideGameObjects = rootGOs.FindAll(x => int.TryParse(x.name, out i) && x.GetComponent<Slide>() != null);
+		slides = slideGameObjects.ConvertAll(x => x.GetComponent<Slide>());
 		slides.Sort((x, y) => int.Parse(x.name).CompareTo(int.Parse(y.name)));
 		
 		//Make sure there are no gaps in the slide numbers
@@ -118,22 +136,22 @@ public class SlideController : MonoBehaviour
 		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("<<", GUILayout.Width(30f)))
 		{
-			SlideIndex--;
+			Back();
 		}
 		if (GUILayout.Button(">>", GUILayout.Width(30f)))
 		{
-			SlideIndex++;
+			Forward();
 		}
 
 		if (Event.current.keyCode == KeyCode.LeftArrow && Event.current.type == EventType.KeyDown)
 		{
-			SlideIndex--;
+			Back();
 			Event.current.Use();
 		}
 		
 		if (Event.current.keyCode == KeyCode.RightArrow && Event.current.type == EventType.KeyDown)
 		{
-			SlideIndex++;
+			Forward();
 			Event.current.Use();
 		}
 
@@ -141,6 +159,7 @@ public class SlideController : MonoBehaviour
 		    Event.current.type == EventType.KeyDown)
 		{
 			SlideIndex = 0;
+			ElementIndex = 0;
 			Event.current.Use();
 		}
 		
@@ -149,6 +168,37 @@ public class SlideController : MonoBehaviour
 		#if UNITY_EDITOR
 		UnityEditor.Handles.EndGUI();
 		#endif
+	}
+
+	private void Back()
+	{
+		MoveInDirection(-1);
+	}
+	
+	private void Forward()
+	{
+		MoveInDirection(1);
+	}
+
+	private void MoveInDirection(int direction)
+	{
+		var slide = slides[slideIndex];
+		var newElementIndex = elementIndex + direction;
+		if (newElementIndex < 0 && direction < 0)
+		{
+			SlideIndex--;
+			ElementIndex = slides[slideIndex].Elements.Count;
+			return;
+		}
+
+		if (newElementIndex > slide.Elements.Count)
+		{
+			SlideIndex++;
+			ElementIndex = 0;
+			return;
+		}
+
+		ElementIndex = newElementIndex;
 	}
 
 	#if UNITY_EDITOR
@@ -168,11 +218,11 @@ public class SlideController : MonoBehaviour
 
 		for (int i = 0; i < slides.Count; i++)
 		{
-			slides[i].SetActive(i == index);
+			slides[i].gameObject.SetActive(i == index);
 			#if UNITY_EDITOR
 			if (i == index && indexChanged)
 			{
-				UnityEditor.Selection.activeGameObject = slides[i];
+				UnityEditor.Selection.activeGameObject = slides[i].gameObject;
 			}
 			#endif
 		}
