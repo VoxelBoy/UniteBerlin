@@ -132,26 +132,18 @@ public class SlideController : MonoBehaviour
 		#endif
 		var buttonheight = inSceneView ? 20f : 20f;
 		GUI.color = new Color(1f,1f,1f,0.1f);
-		//GUILayout.BeginArea(new Rect(Screen.width - 100f, Screen.height - buttonheight, 100f, buttonheight));
+		
 		GUILayout.BeginHorizontal();
-		if (GUILayout.Button("<<", GUILayout.Width(30f)))
+		if (GUILayout.Button("<<", GUILayout.Width(30f)) ||
+		    (Event.current.keyCode == KeyCode.LeftArrow && Event.current.type == EventType.KeyDown))
 		{
-			Back();
-		}
-		if (GUILayout.Button(">>", GUILayout.Width(30f)))
-		{
-			Forward();
-		}
-
-		if (Event.current.keyCode == KeyCode.LeftArrow && Event.current.type == EventType.KeyDown)
-		{
-			Back();
+			Back(Event.current.alt);
 			Event.current.Use();
 		}
-		
-		if (Event.current.keyCode == KeyCode.RightArrow && Event.current.type == EventType.KeyDown)
+		if (GUILayout.Button(">>", GUILayout.Width(30f)) ||
+		    (Event.current.keyCode == KeyCode.RightArrow && Event.current.type == EventType.KeyDown))
 		{
-			Forward();
+			Forward(Event.current.alt);
 			Event.current.Use();
 		}
 
@@ -170,19 +162,27 @@ public class SlideController : MonoBehaviour
 		#endif
 	}
 
-	private void Back()
+	private void Back(bool skipSlideElements)
 	{
-		MoveInDirection(-1);
+		MoveInDirection(-1, skipSlideElements);
 	}
 	
-	private void Forward()
+	private void Forward(bool skipSlideElements)
 	{
-		MoveInDirection(1);
+		MoveInDirection(1, skipSlideElements);
 	}
 
-	private void MoveInDirection(int direction)
+	private void MoveInDirection(int direction, bool skipSlideElements = false)
 	{
 		var slide = slides[slideIndex];
+
+		if (skipSlideElements)
+		{
+			SlideIndex += direction;
+			ElementIndex = 0;
+			return;
+		}
+		
 		var newElementIndex = elementIndex + direction;
 		if (newElementIndex < 0 && direction < 0)
 		{
