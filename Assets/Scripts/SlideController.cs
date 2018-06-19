@@ -130,7 +130,6 @@ public class SlideController : MonoBehaviour
 		#if UNITY_EDITOR
 		UnityEditor.Handles.BeginGUI();
 		#endif
-		var buttonheight = inSceneView ? 20f : 20f;
 		GUI.color = new Color(1f,1f,1f,0.1f);
 		
 		GUILayout.BeginHorizontal();
