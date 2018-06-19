@@ -175,25 +175,23 @@ public class SlideController : MonoBehaviour
 	{
 		var slide = slides[slideIndex];
 
-		if (skipSlideElements)
+		var newElementIndex = elementIndex + direction;
+		if (skipSlideElements || newElementIndex > slide.Elements.Count)
 		{
-			SlideIndex += direction;
-			ElementIndex = 0;
+			var newSlideIndex = SlideIndex + direction;
+			if (newSlideIndex > -1 && newSlideIndex < slides.Count)
+			{
+				SlideIndex = newSlideIndex;
+				ElementIndex = 0;
+			}
+
 			return;
 		}
 		
-		var newElementIndex = elementIndex + direction;
 		if (newElementIndex < 0 && direction < 0)
 		{
 			SlideIndex--;
 			ElementIndex = slides[slideIndex].Elements.Count;
-			return;
-		}
-
-		if (newElementIndex > slide.Elements.Count)
-		{
-			SlideIndex++;
-			ElementIndex = 0;
 			return;
 		}
 
