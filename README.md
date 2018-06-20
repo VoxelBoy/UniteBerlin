@@ -28,10 +28,10 @@ The presentation slides can be viewed in the Unity project in this repository.
 * [OnValidate()]()
 * [PostProcessBuildAttribute]()
 
-### Avoid computation time
+### Avoid asset import times
 * [Cache Server v6.0](https://github.com/Unity-Technologies/unity-cache-server)
 
-### Speed up compilation time
+### Speed up compilation times
 * [Incremental Compiler](https://forum.unity.com/threads/unity-incremental-c-compiler.523993/)
 * [Compile Time Tracker](https://github.com/DarrenTsung/DTCompileTimeTracker)
 
