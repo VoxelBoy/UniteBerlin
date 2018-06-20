@@ -93,7 +93,6 @@ public class SlideController : MonoBehaviour
 	void OnEnable()
 	{
 		#if UNITY_EDITOR
-//		Debug.Log("OnEnable, isPlaying:" + Application.isPlayer);
 		if (Application.isPlaying == false)
 		{
 			UnityEditor.SceneView.onSceneGUIDelegate += OnSceneGUI;
@@ -134,20 +133,19 @@ public class SlideController : MonoBehaviour
 		
 		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("<<", GUILayout.Width(30f)) ||
-		    (Event.current.keyCode == KeyCode.LeftArrow && Event.current.type == EventType.KeyDown))
+		    ((Event.current.keyCode == KeyCode.LeftArrow || Event.current.keyCode == KeyCode.PageUp) && Event.current.type == EventType.KeyDown))
 		{
 			Back(Event.current.alt);
 			Event.current.Use();
 		}
 		if (GUILayout.Button(">>", GUILayout.Width(30f)) ||
-		    (Event.current.keyCode == KeyCode.RightArrow && Event.current.type == EventType.KeyDown))
+		    ((Event.current.keyCode == KeyCode.RightArrow || Event.current.keyCode == KeyCode.PageDown) && Event.current.type == EventType.KeyDown))
 		{
 			Forward(Event.current.alt);
 			Event.current.Use();
 		}
 
-		if ((Event.current.keyCode == KeyCode.Alpha0 || Event.current.keyCode == KeyCode.Keypad0) &&
-		    Event.current.type == EventType.KeyDown)
+		if ((Event.current.keyCode == KeyCode.Alpha0 ||Event.current.keyCode == KeyCode.Keypad0) && Event.current.type == EventType.KeyDown)
 		{
 			SlideIndex = 0;
 			ElementIndex = 0;
