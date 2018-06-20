@@ -27,3 +27,24 @@ The presentation slides can be viewed in the Unity project in this repository.
 * [EditorApplication callbacks (see Events section)](https://docs.unity3d.com/ScriptReference/EditorApplication.html)
 * [OnValidate()]()
 * [PostProcessBuildAttribute]()
+
+### Avoid computation time
+* [Cache Server v6.0](https://github.com/Unity-Technologies/unity-cache-server)
+
+### Speed up compilation time
+* [Incremental Compiler](https://forum.unity.com/threads/unity-incremental-c-compiler.523993/)
+* [Compile Time Tracker](https://github.com/DarrenTsung/DTCompileTimeTracker)
+
+### Different approach to scripting
+* [Unity Native Scripting](https://github.com/jacksondunstan/UnityNativeScripting)
+
+### Time to find information
+* [How to be a Resourceful Developer](https://www.youtube.com/watch?v=emaRftLcP9s)
+
+### My previous Unite talks
+* [UNITE Europe’17 - How to be a Resourceful Unity Developer](https://www.youtube.com/watch?v=emaRftLcP9s)
+* [UNITE’15 - Writing Shaders: YOU Can Do It!](https://www.youtube.com/watch?v=epixwRw80MM)
+* [UNITE’13 - Advanced Editor Scripting](https://www.youtube.com/watch?v=t-wShOv8c1E)
+* [UNITE’13 - Unity in the Wild](https://www.youtube.com/watch?v=5GAIZPfIndo)
+* [UNITE’12 - Advanced Editor Scripting](https://www.youtube.com/watch?v=itkm-emb5tg)
+* [UNITE’11 - Smuggle Truck Postmortem](https://www.youtube.com/watch?v=i9z_-d3C2R4)
