@@ -1,6 +1,12 @@
 ## Become a Speed Demon: Being faster at everything you do in Unity
 #### Presented at Unite Berlin (2018)
 
+[YouTube video](http://www.youtube.com/watch?feature=player_embedded&v=apct9_tsBdA)
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=apct9_tsBdA
+" target="_blank"><img src="http://img.youtube.com/vi/apct9_tsBdA/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+
 The presentation slides can be viewed in the Unity project in this repository.
 * Open the Main.unity scene.
 * Enter Play mode.
