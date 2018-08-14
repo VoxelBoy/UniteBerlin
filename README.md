@@ -24,10 +24,9 @@ The presentation slides can be viewed in the Unity project in this repository.
 
 #### Noteworthy 3rd party tools (no affiliation)
 * [SRDebugger](https://assetstore.unity.com/packages/tools/gui/srdebugger-console-tools-on-device-27688)
-* [Haste](https://assetstore.unity.com/packages/tools/utilities/haste-pro-18584)
+* [MonKey Commander](https://assetstore.unity.com/packages/tools/utilities/monkey-commander-productivity-booster-119938)
 * [Unity Shell](https://github.com/marijnz/unity-shell/)
 * [REX Diagnostics](https://assetstore.unity.com/packages/tools/utilities/rex-diagnostics-18175)
-* [MonKey Commander](https://assetstore.unity.com/packages/tools/utilities/monkey-commander-productivity-booster-119938)
 
 ### Automation
 * [Asset Pre/Post Processors](https://docs.unity3d.com/ScriptReference/AssetPostprocessor.html)
